@@ -13,7 +13,6 @@
 <?=$this->Form->submit('検索') ?>
 <?=$this->Form->end() ?>
 <?=$message ?>
-<?=$count ?>
 
 <?php foreach ($hotels as $hotel): ?>
 <div>

@@ -45,6 +45,7 @@ class HotelSearchController extends AppController
             }
             if ($prefcode) {
                 $prefcode = '&pref=' . $prefcode;
+                var_dump($prefcode);
             }
             if ($adult_num) {
                 $adult_num = '&adult_num=' . $adult_num;
@@ -55,7 +56,7 @@ class HotelSearchController extends AppController
 
             // 検索結果の取得
             $http = new Client();
-            $response = $http->get("http://jws.jalan.net/APIAdvance/HotelSearch/V1/?key=tau161a8b480fc$hotelname$prefcode$adult_num$stay_count");
+            $response = $http->get("http://jws.jalan.net/APIAdvance/HotelSearch/V1/?key=tau161a8b480fc$hotelname$prefcode$adult_num$stay_count&count=20");
             $xml_response = @$response->xml; // namespaceエラーを非表示
 
             $this->set('hotels', $xml_response->Hotel);
@@ -63,24 +64,19 @@ class HotelSearchController extends AppController
             // エラーの場合メッセージを表示
             if ($xml_response->Message) {
                 $this->set('message', $xml_response->Message);
-                $this->set('count', '');
                 return;
             } else {
                 $this->set('message', '');
             }
             // 0件の場合メッセージを表示
-            if ($xml_response->NumberOfResults>0) {
-                $this->set('count', '結果：' . $xml_response->NumberOfResults . '件');
+            if ($xml_response->NumberOfResults > 0) {
                 $this->set('message', '');
             } else {
-                $this->set('count', '');
                 $this->set('message', '条件に一致する宿がありませんでした。');
             }
-
         } else {
             // 初期は何も表示しない
             $this->set('hotels', []);
-            $this->set('count', '');
             $this->set('message', '');
         }
     }
